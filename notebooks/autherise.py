@@ -5,7 +5,7 @@ import spotipy.util as util
 import configparser
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('../config.ini')
 
 scopes = ['ugc-image-upload',
           'user-read-playback-state',
