@@ -6,6 +6,14 @@ __pycache__/
 # C extensions
 *.so
 
+# We don't push our API keys to github
+*.ini
+# nor our caches
+.cache*
+
+# Virtual environment
+*_venv
+
 # Distribution / packaging
 .Python
 build/
