@@ -1,8 +1,10 @@
-from utils.instagram import Instragram
-from utils.sheets import GoogleSheet
+from utils.bot import Bot
 from configparser import ConfigParser
 from utils.argparser import KontArgumentParser
 from pathlib import Path
+
+import imageio
+imageio.plugins.ffmpeg.download()
 
 
 def main():
@@ -20,13 +22,12 @@ def main():
     insta_u, insta_p = config['INSTAGRAM']['KONT_USERNAME'], config['INSTAGRAM']['KONT_PASSWORD']
     google_key_file = config['GOOGLE']['KEY_FILE']
 
-    # Create Clients
-    InstaClient = Instragram(insta_u, insta_p)
-    GoogleClient = GoogleSheet(google_key_file)
+    # Create Client
+    Client = Bot(insta_u, insta_p, google_key_file)
 
-    insta_num_followers = InstaClient.get_num_followers()
-
-    GoogleClient.add_row([insta_num_followers])
+    # Instagram Tasks
+    Client.update_insta_follower_count()
+    Client.update_insta_followers_info()
 
 
 if __name__ == '__main__':
