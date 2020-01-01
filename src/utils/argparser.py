@@ -11,6 +11,7 @@ class KontArgumentParser(object):
                                  action='store_true')
         self.parser.add_argument('-c',
                                  '--config',
+                                 default='config.ini',
                                  help='path to config.ini',
                                  type=str)
         self.args = self.parser.parse_args()

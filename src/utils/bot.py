@@ -1,11 +1,24 @@
 from .instagram import Instagram
 from .sheets import GoogleSheet
+from .spotify import SpotifyArtist
 
 
 class Bot(object):
-    def __init__(self, insta_u, insta_p, google_key_file):
+    def __init__(self, insta_u, insta_p, google_key_file, client_id, client_secret):
         self.Insta = Instagram(insta_u, insta_p)
         self.Google = GoogleSheet(google_key_file)
+        self.SpotifyArtist = SpotifyArtist(client_id, client_secret)
+
+    def update_spotify_track_plays(self):
+        """
+        """
+        df = self.SpotifyArtist.get_track_counts()
+        for row in df.iterrows():
+            name = row[1]['name'].upper().replace(
+                ' ', '_').replace('Ë', 'E').replace("'", '')
+            playcount = str(row[1]['playcount'])
+            message = 'PLAYS_'+name
+            self.Google.write_raw_log('SPOTIFY', message, playcount)
 
     def update_insta_follower_count(self):
         """
@@ -42,11 +55,15 @@ class Bot(object):
         who_left = list(cur_followers.difference(new_followers))
         who_joined = list(new_followers.difference(cur_followers))
 
-        self.Google.write_raw_log(
-            'INSTAGRAM', 'FOLLOWERS_LEFT', ', '.join(who_left))
-        self.Google.write_raw_log(
-            'INSTAGRAM', 'FOLLOWERS_JOINED', ', '.join(who_joined))
+        if len(who_left) > 0:
+            self.Google.write_raw_log(
+                'INSTAGRAM', 'FOLLOWERS_LEFT', ', '.join(who_left))
 
-        self.Google.df_to_sheet('kontstats',
-                                'INSTA_FOLLOWERS',
-                                new_following)
+        if len(who_joined) > 0:
+            self.Google.write_raw_log(
+                'INSTAGRAM', 'FOLLOWERS_JOINED', ', '.join(who_joined))
+
+        if (len(who_left) > 0) or (len(who_joined) > 0):
+            self.Google.df_to_sheet('kontstats',
+                                    'INSTA_FOLLOWERS',
+                                    new_following)
