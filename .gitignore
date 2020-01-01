@@ -10,6 +10,13 @@ __pycache__/
 *.ini
 # nor our caches
 .cache*
+#
+*credentials.json*
+*.pickle
+*kontstats-d1e621a98972.json*
+*.DS_Store*
+
+*/**/data/*.*
 
 # Virtual environment
 *_venv
