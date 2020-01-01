@@ -7,7 +7,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 
 class GoogleSheet(object):
-    def __init__(self, keyfile='../kontstats-d1e621a98972.json'):
+    def __init__(self, keyfile):
         scope = ['https://spreadsheets.google.com/feeds',
                  'https://www.googleapis.com/auth/drive']
         creds = ServiceAccountCredentials.from_json_keyfile_name(

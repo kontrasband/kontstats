@@ -42,8 +42,8 @@ else:
 token = util.prompt_for_user_token(
     username,
     scope,
-    client_id=config['SPOTIFY']['client_id'],
-    client_secret=config['SPOTIFY']['client_secret'],
+    client_id=config['SPOTIFY']['CLIENT_ID'],
+    client_secret=config['SPOTIFY']['CLIENT_SECRET'],
     redirect_uri='http://127.0.0.1')
 
 if token:
