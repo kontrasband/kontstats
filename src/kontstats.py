@@ -24,17 +24,26 @@ def main():
 
     insta_u, insta_p = config['INSTAGRAM']['KONT_USERNAME'], config['INSTAGRAM']['KONT_PASSWORD']
     google_key_file = config['GOOGLE']['KEY_FILE']
-    client_id, client_secret = config['SPOTIFY']['CLIENT_ID'], config['SPOTIFY']['CLIENT_SECRET']
+    google_api_key = config['GOOGLE']['API_KEY']
+    spotify_client_id = config['SPOTIFY']['CLIENT_ID']
+    spotify_client_secret = config['SPOTIFY']['CLIENT_SECRET']
 
     # Create Client
-    Client = Bot(insta_u, insta_p, google_key_file, client_id, client_secret)
+    Client = Bot(insta_u, insta_p,
+                 google_key_file,
+                 spotify_client_id,
+                 spotify_client_secret,
+                 google_api_key)
 
-    # # Instagram Tasks
+    # Instagram Tasks
     Client.update_insta_follower_count()
     Client.update_insta_followers_info()
 
     # Spotify Tasks
     Client.update_spotify_track_plays()
+
+    # Youtube Tasks
+    Client.update_youtube_stats()
 
 
 if __name__ == '__main__':

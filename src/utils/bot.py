@@ -1,13 +1,26 @@
 from .instagram import Instagram
 from .sheets import GoogleSheet
 from .spotify import SpotifyArtist
+from .youtube import Youtube
 
 
 class Bot(object):
-    def __init__(self, insta_u, insta_p, google_key_file, client_id, client_secret):
+    def __init__(self, insta_u, insta_p, google_key_file, spotify_client_id, spotify_client_secret, google_api_key):
         self.Insta = Instagram(insta_u, insta_p)
         self.Google = GoogleSheet(google_key_file)
-        self.SpotifyArtist = SpotifyArtist(client_id, client_secret)
+        self.SpotifyArtist = SpotifyArtist(spotify_client_id,
+                                           spotify_client_secret)
+        self.Youtube = Youtube(google_api_key)
+
+    def update_youtube_stats(self):
+        df = self.Youtube.get_stats()
+        stats = [c for c in df.columns if c != 'name']
+        for row in df.iterrows():
+            name = row[1]['name']
+            for stat in stats:
+                metric = str(row[1][stat])
+                message = stat.upper()+'_'+name
+                self.Google.write_raw_log('YOUTUBE', message, metric)
 
     def update_spotify_track_plays(self):
         """

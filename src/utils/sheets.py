@@ -4,21 +4,7 @@ from string import ascii_uppercase
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials as SAC
-
-SUPPORTED_RAW_LOG_PLATFORMS = ['SPOTIFY',
-                               'INSTAGRAM',
-                               'FACEBBOOK',
-                               'YOUTUBE']
-
-SUPPORTED_RAW_LOG_MESSAGES = ['FOLLOWER_COUNT',
-                              'FOLLOWERS_LEFT',
-                              'FOLLOWERS_JOINED',
-                              'PLAYS_RAAK_N_BIETJIE_FUCKED',
-                              'PLAYS_MY_DOLLA_NEE',
-                              'PLAYS_SEEMAN',
-                              'PLAYS_KOPSTAMP',
-                              'PLAYS_MIDDELKLAS_MIDDELMAN',
-                              'PLAYS_SKIET_REENBOE_OP_FASCISME']
+from .constants import SUPPORTED_RAW_LOG_PLATFORMS, SUPPORTED_RAW_LOG_MESSAGES
 
 
 class GoogleSheet(object):
