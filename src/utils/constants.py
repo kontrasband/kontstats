@@ -9,15 +9,19 @@ SUPPORTED_RAW_LOG_PLATFORMS = ['SPOTIFY',
 SUPPORTED_RAW_LOG_MESSAGES = ['FOLLOWER_COUNT',
                               'FOLLOWERS_LEFT',
                               'FOLLOWERS_JOINED',
-                              'PLAYS_RAAK_N_BIETJIE_FUCKED',
-                              'PLAYS_MY_DOLLA_NEE',
-                              'PLAYS_SEEMAN',
-                              'PLAYS_KOPSTAMP',
-                              'PLAYS_MIDDELKLAS_MIDDELMAN',
-                              'PLAYS_SKIET_REENBOE_OP_FASCISME']
-YOUTUBE_MESSAGES = []
-for vid in ['KOPSTAMP', 'MIDDELKLAS_MIDDELMAN']:
-    for stat in ['VIEWCOUNT', 'LIKECOUNT', 'DISLIKECOUNT', 'FAVORITECOUNT', 'COMMENTCOUNT']:
-        YOUTUBE_MESSAGES.append(stat+'_'+vid)
+                              'PLAYS',
+                              'VIEWCOUNT',
+                              'LIKECOUNT',
+                              'DISLIKECOUNT',
+                              'FAVORITECOUNT',
+                              'COMMENTCOUNT']
 
-SUPPORTED_RAW_LOG_MESSAGES = SUPPORTED_RAW_LOG_MESSAGES + YOUTUBE_MESSAGES
+SUPPORTED_RAW_LOG_SONGS = ['RAAK_N_BIETJIE_FUCKED',
+                           'MY_DOLLA_NEE',
+                           'SEEMAN',
+                           'KOPSTAMP',
+                           'MIDDELKLAS_MIDDELMAN',
+                           'SKIET_REENBOE_OP_FASCISME']
+
+
+LOGGING_FORMAT = '%(asctime)-15s %(levelname)-10s %(name)-8s %(message)s'

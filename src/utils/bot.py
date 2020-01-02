@@ -2,15 +2,20 @@ from .instagram import Instagram
 from .sheets import GoogleSheet
 from .spotify import SpotifyArtist
 from .youtube import Youtube
+from .auth.insta_auth import LoginChallenge
 
 
 class Bot(object):
     def __init__(self, insta_u, insta_p, google_key_file, spotify_client_id, spotify_client_secret, google_api_key):
         self.Insta = Instagram(insta_u, insta_p)
+        self.InstaLC = LoginChallenge(insta_u, insta_p)
         self.Google = GoogleSheet(google_key_file)
         self.SpotifyArtist = SpotifyArtist(spotify_client_id,
                                            spotify_client_secret)
         self.Youtube = Youtube(google_api_key)
+
+    def challenge_instagram_auth(self):
+        self.InstaLC.init_challenge()
 
     def update_youtube_stats(self):
         df = self.Youtube.get_stats()
@@ -19,8 +24,8 @@ class Bot(object):
             name = row[1]['name']
             for stat in stats:
                 metric = str(row[1][stat])
-                message = stat.upper()+'_'+name
-                self.Google.write_raw_log('YOUTUBE', message, metric)
+                stat = stat.upper()
+                self.Google.write_raw_log('YOUTUBE', name, stat, metric)
 
     def update_spotify_track_plays(self):
         """
@@ -30,8 +35,8 @@ class Bot(object):
             name = row[1]['name'].upper().replace(
                 ' ', '_').replace('Ë', 'E').replace("'", '')
             playcount = str(row[1]['playcount'])
-            message = 'PLAYS_'+name
-            self.Google.write_raw_log('SPOTIFY', message, playcount)
+            message = 'PLAYS'
+            self.Google.write_raw_log('SPOTIFY', name, message, playcount)
 
     def update_insta_follower_count(self):
         """
@@ -43,7 +48,10 @@ class Bot(object):
 
         df = self.Insta.get_followers_df()
         n_followers = df.shape[0]
-        self.Google.write_raw_log('INSTAGRAM', 'FOLLOWER_COUNT', n_followers)
+        self.Google.write_raw_log('INSTAGRAM',
+                                  '',
+                                  'FOLLOWER_COUNT',
+                                  n_followers)
 
     def update_insta_followers_info(self):
         """
@@ -69,12 +77,16 @@ class Bot(object):
         who_joined = list(new_followers.difference(cur_followers))
 
         if len(who_left) > 0:
-            self.Google.write_raw_log(
-                'INSTAGRAM', 'FOLLOWERS_LEFT', ', '.join(who_left))
+            self.Google.write_raw_log('INSTAGRAM',
+                                      '',
+                                      'FOLLOWERS_LEFT',
+                                      ', '.join(who_left))
 
         if len(who_joined) > 0:
-            self.Google.write_raw_log(
-                'INSTAGRAM', 'FOLLOWERS_JOINED', ', '.join(who_joined))
+            self.Google.write_raw_log('INSTAGRAM',
+                                      '',
+                                      'FOLLOWERS_JOINED',
+                                      ', '.join(who_joined))
 
         if (len(who_left) > 0) or (len(who_joined) > 0):
             self.Google.df_to_sheet('kontstats',

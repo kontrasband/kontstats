@@ -53,4 +53,5 @@ class LoginChallenge(object):
             api.ver(link)
             api.login()
         except:
+            print('init_challenge failed')
             pass

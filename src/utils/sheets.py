@@ -4,7 +4,7 @@ from string import ascii_uppercase
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials as SAC
-from .constants import SUPPORTED_RAW_LOG_PLATFORMS, SUPPORTED_RAW_LOG_MESSAGES
+from .constants import SUPPORTED_RAW_LOG_PLATFORMS, SUPPORTED_RAW_LOG_MESSAGES, SUPPORTED_RAW_LOG_SONGS
 
 
 class GoogleSheet(object):
@@ -30,18 +30,20 @@ class GoogleSheet(object):
                           columns=colnames)
         return df
 
-    def write_raw_log(self, platform, message, value):
+    def write_raw_log(self, platform, song, message, value):
         """
         Method that writes a raw log entry in the RAW_LOGS sheet
         """
         assert platform in SUPPORTED_RAW_LOG_PLATFORMS, f'{platform} not in SUPPORTED_RAW_LOG_PLATFORMS:{", ".join(SUPPORTED_RAW_LOG_PLATFORMS)}'
         assert message in SUPPORTED_RAW_LOG_MESSAGES, f'{message} not in SUPPORTED_RAW_LOG_PLATFORMS:{", ".join(SUPPORTED_RAW_LOG_MESSAGES)}'
+        assert song in SUPPORTED_RAW_LOG_SONGS, f'{song} not in SUPPORTED_RAW_LOG_PLATFORMS:{", ".join(SUPPORTED_RAW_LOG_MESSAGES)}'
 
         log = []
 
         timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         log.append(timestamp)
         log.append(platform)
+        log.append(song)
         log.append(message)
         log.append(value)
 
