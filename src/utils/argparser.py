@@ -9,6 +9,18 @@ class KontArgumentParser(object):
                                  '--verbose',
                                  help='increase output verbosity',
                                  action='store_true')
+        self.parser.add_argument('-i',
+                                 '--instagram',
+                                 help='perform Instagram tasks',
+                                 action='store_true')
+        self.parser.add_argument('-s',
+                                 '--spotify',
+                                 help='perform Spotify tasks',
+                                 action='store_true')
+        self.parser.add_argument('-y',
+                                 '--youtube',
+                                 help='perform youtube tasks',
+                                 action='store_true')
         self.parser.add_argument('-c',
                                  '--config',
                                  default='config.ini',

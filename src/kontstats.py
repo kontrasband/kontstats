@@ -26,6 +26,10 @@ def main():
     parser = KontArgumentParser()
     args = parser.get_args()
 
+    youtube = args.youtube
+    spotify = args.spotify
+    instagram = args.instagram
+
     # Read config
     logging.debug('Reading Config')
     config_file = Path(args.config)
@@ -47,19 +51,19 @@ def main():
                  spotify_client_secret,
                  google_api_key)
 
-    # Instagram Tasks
-    logging.info('Instagram tasks')
-    # client.challenge_instagram_auth()
-    # client.update_insta_follower_count()
-    # client.update_insta_followers_info()
+    if instagram:
+        logging.info('Instagram tasks')
+        client.challenge_instagram_auth()
+        client.update_insta_follower_count()
+        client.update_insta_followers_info()
 
-    # Spotify Tasks
-    logging.info('Spotify tasks')
-    client.update_spotify_track_plays()
+    if spotify:
+        logging.info('Spotify tasks')
+        client.update_spotify_track_plays()
 
-    # Youtube Tasks
-    logging.info('Youtube tasks')
-    client.update_youtube_stats()
+    if youtube:
+        logging.info('Youtube tasks')
+        client.update_youtube_stats()
 
     logging.info('Done')
 
