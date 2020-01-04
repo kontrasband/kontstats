@@ -7,7 +7,7 @@ from oauth2client.service_account import ServiceAccountCredentials as SAC
 from .constants import SUPPORTED_RAW_LOG_PLATFORMS, SUPPORTED_RAW_LOG_MESSAGES, SUPPORTED_RAW_LOG_SONGS
 
 
-class GoogleSheet(object):
+class GSpread(object):
     def __init__(self, keyfile):
         scope = ['https://spreadsheets.google.com/feeds',
                  'https://www.googleapis.com/auth/drive']
