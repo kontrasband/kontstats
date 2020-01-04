@@ -20,11 +20,12 @@ google_key_file = config['GOOGLE']['KEY_FILE']
 google_api_key = config['GOOGLE']['API_KEY']
 spotify_client_id = config['SPOTIFY']['CLIENT_ID']
 spotify_client_secret = config['SPOTIFY']['CLIENT_SECRET']
-client_deats = [insta_u, insta_p,
-                google_key_file,
-                spotify_client_id,
-                spotify_client_secret,
-                google_api_key]
+
+bot_deats = [insta_u, insta_p,
+             google_key_file,
+             spotify_client_id,
+             spotify_client_secret,
+             google_api_key]
 
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
@@ -45,8 +46,8 @@ app.layout = body
               [Input('btnRefresh', 'n_clicks')])
 def refreshGraph(n_clicks):
     if n_clicks is not None:
-        client = Bot(*client_deats)
-        df = client.Google.get_raw_logs_as_df()
+        bot = Bot(*bot_deats)
+        df = bot.GSpread.get_raw_logs_as_df()
         df.DATETIME = df.DATETIME.astype('datetime64[ns]')
         spot_df = df[df.PLATFORM == 'SPOTIFY']
         yt_df = df[df.PLATFORM == 'YOUTUBE']
