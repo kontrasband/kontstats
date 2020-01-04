@@ -1,5 +1,6 @@
 import spotipy
 import pandas as pd
+import logging
 from spotipy.oauth2 import SpotifyClientCredentials as SCC
 from requests import get
 from json import loads
@@ -22,9 +23,18 @@ def get_albums_count(album_ids):
     return df
 
 
-class SpotifyArtist(object):
-    def __init__(self, client_id, client_secret, artist_uri='spotify:artist:13mo5g6PR09u3Rq8bEstY2'):
+class Spotify(object):
+    """
+    Spotify is an object to interact with Spotify stats.
 
+    It uses a server hosted on https://t4ils.dev:4433/api/beta/albumPlayCount 
+    for https://github.com/evilarceus/Spotify-PlayCount that returns the playcount of an album.
+
+    It uses the Spotipy client for the rest.
+    """
+
+    def __init__(self, client_id, client_secret, artist_uri='spotify:artist:13mo5g6PR09u3Rq8bEstY2'):
+        logging.debug('Spotify.__init__()')
         creds = SCC(client_id, client_secret)
         self.client = spotipy.Spotify(client_credentials_manager=creds)
         self.artist_uri = artist_uri

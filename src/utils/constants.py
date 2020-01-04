@@ -16,7 +16,8 @@ SUPPORTED_RAW_LOG_MESSAGES = ['FOLLOWER_COUNT',
                               'FAVORITECOUNT',
                               'COMMENTCOUNT']
 
-SUPPORTED_RAW_LOG_SONGS = ['RAAK_N_BIETJIE_FUCKED',
+SUPPORTED_RAW_LOG_SONGS = ['',
+                           'RAAK_N_BIETJIE_FUCKED',
                            'MY_DOLLA_NEE',
                            'SEEMAN',
                            'KOPSTAMP',

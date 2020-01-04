@@ -19,14 +19,16 @@ def main():
     """
     Run python konstats.py -h for help
     """
-    logging.info('Start')
+    logging.warning('Start')
 
-    # Parse Arguments
     logging.debug('Parsing Arguments')
     parser = KontArgumentParser()
     args = parser.get_args()
 
-    # Read config
+    youtube = args.youtube
+    spotify = args.spotify
+    instagram = args.instagram
+
     logging.debug('Reading Config')
     config_file = Path(args.config)
     assert config_file.exists(), f'{config_file} doesn\'t exist.'
@@ -39,29 +41,35 @@ def main():
     spotify_client_id = config['SPOTIFY']['CLIENT_ID']
     spotify_client_secret = config['SPOTIFY']['CLIENT_SECRET']
 
-    # Create Client
     logging.debug('Creating Bot client')
-    client = Bot(insta_u, insta_p,
-                 google_key_file,
-                 spotify_client_id,
-                 spotify_client_secret,
-                 google_api_key)
+    bot = Bot(insta_u, insta_p,
+              google_key_file,
+              spotify_client_id,
+              spotify_client_secret,
+              google_api_key)
 
-    # Instagram Tasks
-    logging.info('Instagram tasks')
-    # client.challenge_instagram_auth()
-    # client.update_insta_follower_count()
-    # client.update_insta_followers_info()
+    if instagram:
+        logging.info('Initialising Instagram')
+        bot.init_instagram()
 
-    # Spotify Tasks
-    logging.info('Spotify tasks')
-    client.update_spotify_track_plays()
+        logging.info('Performing Instagram tasks')
+        bot.update_insta_follower_count()
+        bot.update_insta_followers_info()
 
-    # Youtube Tasks
-    logging.info('Youtube tasks')
-    client.update_youtube_stats()
+    if spotify:
+        logging.info('Initialising Spotify')
+        bot.init_spotify()
 
-    logging.info('Done')
+        logging.info('Performing Spotify tasks')
+        bot.update_spotify_track_plays()
+
+    if youtube:
+        logging.info('Initialising Youtube')
+        bot.init_youtube()
+        logging.info('Performing Youtube tasks')
+        bot.update_youtube_stats()
+
+    logging.warning('End')
 
 
 if __name__ == '__main__':
