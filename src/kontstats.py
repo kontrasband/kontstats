@@ -41,6 +41,7 @@ def main():
     spotify_client_id = config['SPOTIFY']['CLIENT_ID']
     spotify_client_secret = config['SPOTIFY']['CLIENT_SECRET']
 
+    print('Initialising Bot')
     logging.debug('Creating Bot client')
     bot = Bot(insta_u, insta_p,
               google_key_file,
@@ -49,6 +50,7 @@ def main():
               google_api_key)
 
     if instagram:
+        print('Performing Instagram Tasks')
         logging.info('Initialising Instagram')
         bot.init_instagram()
 
@@ -57,6 +59,7 @@ def main():
         bot.update_insta_followers_info()
 
     if spotify:
+        print('Performing Spotify Tasks')
         logging.info('Initialising Spotify')
         bot.init_spotify()
 
@@ -64,6 +67,7 @@ def main():
         bot.update_spotify_track_plays()
 
     if youtube:
+        print('Performing Youtube Tasks')
         logging.info('Initialising Youtube')
         bot.init_youtube()
         logging.info('Performing Youtube tasks')

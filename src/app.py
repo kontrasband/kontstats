@@ -4,6 +4,8 @@ import dash_bootstrap_components as dbc
 import logging
 import plotly.express as px
 from utils.bot import Bot
+from utils.app.wrangling import clean_data
+from utils.app.plotting import plot_spotify_plays_per_song, plot_youtube_3d, plot_instagram_followers, plot_total_play_per_song
 from argparse import ArgumentParser, RawTextHelpFormatter
 from dash.dependencies import Input, Output
 from dash import Dash
@@ -31,43 +33,59 @@ bot_deats = [insta_u, insta_p,
 app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
 app.config.suppress_callback_exceptions = True
 
+summary_card = dbc.Card(
+    dbc.CardBody([
+        dcc.Graph(id='graphTotalPlays')
+    ]))
+
+youtube_card = dbc.Card(
+    dbc.CardBody([
+        dcc.Graph(id='graphYoutube')
+    ]))
+
+spotify_card = dbc.Card(
+    dbc.CardBody([
+        dcc.Graph(id='graphSpotify')
+    ]))
+
+instagram_card = dbc.Card(
+    dbc.CardBody([
+        dcc.Graph(id='graphInstagram')
+    ]))
+
 
 body = dbc.Container([
     dbc.Row([dbc.Button('Refresh', color="danger", id='btnRefresh')]),
-    dcc.Loading([dbc.Row(dbc.Col([dcc.Graph(id='graphSpotify')], width=12)),
-                 dbc.Row(dbc.Col([dcc.Graph(id='graphYoutube')], width=12))
+    dcc.Loading([dbc.Row([dbc.Col([summary_card], width=6),
+                          dbc.Col([instagram_card], width=6)]),
+                 dbc.Row([dbc.Col([spotify_card], width=6),
+                          dbc.Col([youtube_card], width=6)])
                  ])
-])
+], fluid=True)
 app.layout = body
 
 
 @app.callback([Output('graphSpotify', 'figure'),
-               Output('graphYoutube', 'figure')],
+               Output('graphYoutube', 'figure'),
+               Output('graphInstagram', 'figure'),
+               Output('graphTotalPlays', 'figure')],
               [Input('btnRefresh', 'n_clicks')])
 def refreshGraph(n_clicks):
-    if n_clicks is not None:
-        bot = Bot(*bot_deats)
-        df = bot.GSpread.get_raw_logs_as_df()
-        df.DATETIME = df.DATETIME.astype('datetime64[ns]')
-        spot_df = df[df.PLATFORM == 'SPOTIFY']
-        yt_df = df[df.PLATFORM == 'YOUTUBE']
+    # if n_clicks is not None:
+    bot = Bot(*bot_deats)
+    df = bot.GSpread.get_raw_logs_as_df()
 
-        spot_fig = px.scatter(spot_df,
-                              x='DATETIME',
-                              y='VALUE',
-                              color='SONG',
-                              title='Spotify song streams',
-                              template='plotly_dark').update_traces(mode='lines+markers')
+    df, spotify_df, youtube_df, instagram_df = clean_data(df)
 
-        yt_stat = 'LIKECOUNT'
-        yt_fig = px.scatter(yt_df[yt_df.MESSAGE == yt_stat],
-                            x='DATETIME',
-                            y='VALUE',
-                            color='SONG',
-                            title=f'Youtube {yt_stat}',
-                            template='plotly_dark').update_traces(mode='lines+markers')
+    spotify_plays_per_song_fig = plot_spotify_plays_per_song(spotify_df)
+    youtube_3d_fig = plot_youtube_3d(youtube_df)
+    instagram_followers_fig = plot_instagram_followers(instagram_df)
+    total_play_fig = plot_total_play_per_song(df)
 
-    return (spot_fig, yt_fig)
+    return (spotify_plays_per_song_fig,
+            youtube_3d_fig,
+            instagram_followers_fig,
+            total_play_fig)
 
 
 if __name__ == '__main__':
