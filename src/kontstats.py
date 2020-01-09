@@ -35,7 +35,7 @@ def main():
     config = ConfigParser()
     config.read(config_file)
 
-    insta_u, insta_p = config['INSTAGRAM']['KONT_USERNAME'], config['INSTAGRAM']['KONT_PASSWORD']
+    insta_u, insta_p = config['INSTAGRAM']['USERNAME'], config['INSTAGRAM']['PASSWORD']
     google_key_file = config['GOOGLE']['KEY_FILE']
     google_api_key = config['GOOGLE']['API_KEY']
     spotify_client_id = config['SPOTIFY']['CLIENT_ID']

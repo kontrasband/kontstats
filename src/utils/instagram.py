@@ -1,5 +1,6 @@
 from configparser import ConfigParser
 from InstagramAPI import InstagramAPI
+from .constants import KONTRAS_INSTAGRAM_UID
 import pandas as pd
 
 
@@ -16,7 +17,7 @@ class Instagram(object):
         return self.api.isLoggedIn
 
     def get_latest_followers(self):
-        self.followers = self.api.getTotalSelfFollowers()
+        self.followers = self.api.getTotalFollowers(KONTRAS_INSTAGRAM_UID)
 
     def get_followers_df(self):
         self.get_latest_followers()
